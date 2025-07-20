@@ -9,22 +9,24 @@ class NASAGallery:
     def search_image_request(self) -> None:
         result = get("https://images-api.nasa.gov/search", params={"q": self.search_text})
         if result:
+            print(f"got results: {result}")
             raw_result = result.json()
             self.search_results = raw_result.get("collection", {}).get("items", [])
-            print(self.search_results)
 
 
 def main():
 
     ng = NASAGallery()
-    ui.input("Search for images", value="quasar").bind_value(ng, "search_text").props("outlined")
+    for result in ng.search_results:
+        with ui.row():
+            with ui.card():
+                image_url = result["links"][2]["href"]
+                print(f"{image_url=}")
+                ui.image(image_url)
 
-    ui.button("Search", on_click=lambda: ng.search_image_request())
-
-    with ui.row():
-        for result in ng.search_results:
-            image_url = result["links"][2]["href"]
-            ui.image(image_url)
+    with ui.card():
+        ui.input("Search for images", value="quasar").bind_value(ng, "search_text").props("outlined")
+        ui.button("Search", on_click=lambda: ng.search_image_request())
 
     ui.run()
 
