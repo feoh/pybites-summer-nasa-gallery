@@ -1,5 +1,6 @@
 from nicegui import ui
 from httpx import get
+from pprint import pprint
 
 class NASAGallery:
     def __init__(self):
@@ -7,14 +8,18 @@ class NASAGallery:
         self.search_results = {}
 
     def display_results(self):
-        for result in self.search_results:
-            with ui.row():
-                with ui.card():
-                    image_links = result['links']
-                    image_url = image_links[0]['href']
-                    #image_url = image_links[len(image_links) - 1]['href']
-                    print(f"{image_url=}")
-                    ui.interactive_image(image_url)
+        results_card = ui.card()
+        with results_card:
+            results_card.clear()
+            for result in self.search_results:
+                image_title = result['data'][0]['title']
+                image_description = result['data'][0]['description']
+                image_links = result['links']
+                image_url = image_links[0]['href']
+                with ui.row():
+                    with ui.card():
+                        ui.label(image_title)
+                        ui.interactive_image(image_url)
 
 
 
