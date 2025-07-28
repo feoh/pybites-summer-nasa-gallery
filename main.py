@@ -14,7 +14,7 @@ class NASAGallery:
                     image_url = image_links[0]['href']
                     #image_url = image_links[len(image_links) - 1]['href']
                     print(f"{image_url=}")
-                    ui.image(image_url).classes("w-full")
+                    ui.interactive_image(image_url)
 
 
 
